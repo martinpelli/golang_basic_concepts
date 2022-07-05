@@ -90,6 +90,10 @@ func main() {
 
 	fmtPackage()
 
+	functions()
+
+	loops()
+
 }
 
 func fmtPackage() {
@@ -111,5 +115,56 @@ func fmtPackage() {
 
 	//tipo de datos
 	fmt.Printf("el tipo de dato es %T\n", club)
+}
+
+func functions() {
+	paramFunction("que tal")
+	paramamsFunction(1, 2, "hi")
+	returnedValue := returnFunction(2)
+	returnedValue1, returnedValue2 := returnsFunction(2)
+	returnedValue3, _ := returnsFunction(2)
+	fmt.Println(returnedValue)
+	fmt.Println(returnedValue1, returnedValue2)
+	fmt.Println(returnedValue1, returnedValue3)
+}
+
+func paramFunction(message string) {
+	fmt.Println(message)
+}
+
+func paramamsFunction(a, b int, c string) {
+	fmt.Println(a, b, c)
+}
+
+func returnFunction(a int) int {
+	return a * 2
+}
+
+func returnsFunction(a int) (b, c int) {
+	return a * 2, a
+}
+
+func loops() {
+
+	for i := 0; i < 10; i++ {
+		fmt.Print(i)
+	}
+	fmt.Print("\n")
+
+	counter := 0
+	for counter < 10 {
+		counter++
+		fmt.Print(counter)
+	}
+	fmt.Print("\n")
+
+	listaNumerosPares := []int{2, 4, 6, 8}
+	for i, par := range listaNumerosPares {
+		fmt.Printf("posicion %d número par: %d \n", i, par)
+	}
+
+	for {
+		//infinito
+	}
 
 }
