@@ -1,6 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"golang_platzi/src/mypackage"
+	"log"
+	"strconv"
+	"strings"
+	"sync"
+)
 
 func main() {
 
@@ -94,6 +101,31 @@ func main() {
 
 	loops()
 
+	parse()
+
+	keywords()
+
+	arrays()
+
+	slices()
+
+	fmt.Println(isPalindromo("amor a roma"))
+	fmt.Println(isPalindromo("ama"))
+
+	maps()
+
+	structs()
+
+	pointers()
+
+	stringers()
+
+	interfaces()
+
+	goroutines()
+
+	anonymous()
+
 }
 
 func fmtPackage() {
@@ -163,8 +195,224 @@ func loops() {
 		fmt.Printf("posicion %d número par: %d \n", i, par)
 	}
 
-	for {
-		//infinito
+	//for {
+	//infinito
+	//}
+
+}
+
+func parse() {
+	s, errors := strconv.Atoi("535")
+	b, errorb := strconv.ParseBool("true")
+	f, errorf := strconv.ParseFloat("3.1415", 64)
+	i, errori := strconv.ParseInt("-42", 10, 64)
+	u, erroru := strconv.ParseUint("42", 10, 64)
+
+	if errors != nil {
+		log.Fatal(errors)
+	}
+	if errorb != nil {
+		log.Fatal(errorb)
+	}
+	if errorf != nil {
+		log.Fatal(errorf)
+	}
+	if errori != nil {
+		log.Fatal(errori)
+	}
+	if erroru != nil {
+		log.Fatal(erroru)
 	}
 
+	fmt.Println(s)
+	fmt.Println(b)
+	fmt.Println(f)
+	fmt.Println(i)
+	fmt.Println(u)
+}
+
+func keywords() {
+	//Defer
+	defer fmt.Println("últumo")
+	fmt.Println("primero")
+
+	//continue y break para loops
+}
+
+func arrays() {
+	var array [4]int
+	array[0] = 1
+	fmt.Println(array, len(array), cap(array))
+}
+
+func slices() {
+	slice := []int{0, 1, 2, 3, 4, 5, 6}
+	fmt.Println(slice, len(slice), cap(slice))
+
+	fmt.Println(slice[0])
+	fmt.Println(slice[:3])
+	fmt.Println(slice[2:4])
+	fmt.Println(slice[4:])
+
+	slice = append(slice, 7)
+
+	newSlice := []int{8, 9}
+	slice = append(slice, newSlice...)
+
+	for i, value := range slice {
+		fmt.Println(i)
+		fmt.Println(value)
+	}
+
+}
+
+func maps() {
+	m := make(map[string]int)
+	m["jose"] = 14
+	m["jose"] = 12
+	fmt.Println(m)
+
+	temperature := map[string]int{
+		"Earth": 15,
+		"Mars":  -65,
+	}
+
+	for i, value := range temperature {
+		fmt.Println(i, value)
+	}
+
+	apellido, ok := m["pellicer"]
+	if ok {
+		fmt.Println(apellido)
+	} else {
+		fmt.Println("No existe ese apellido")
+	}
+
+}
+
+func isPalindromo(text string) bool {
+	return text == strings.ToLower(reverse(text))
+}
+
+func reverse(str string) (result string) {
+	for _, v := range str {
+		result += string(v)
+	}
+	return
+}
+
+func structs() {
+	type car struct {
+		model int
+		brand string
+	}
+
+	duster := car{model: 2018, brand: "Renault"}
+
+	sharan := car{}
+	sharan.brand = "Volkswagen"
+	sharan.model = 2012
+
+	fmt.Println(duster, sharan)
+
+	python := mypackage.Language{Name: "python", Type: "Backend"}
+	fmt.Println(python)
+
+}
+
+func pointers() {
+	a := 10
+	b := &a
+
+	fmt.Println(b)
+	fmt.Println(*b)
+
+	myPc := pc{ram: 8, rom: 500, processor: "i5"}
+
+	myPc.ping()
+	myPc.duplicateRam()
+	fmt.Println(myPc)
+
+}
+
+type pc struct {
+	ram       int
+	rom       int
+	processor string
+}
+
+func (myPc pc) ping() {
+	fmt.Println(myPc.processor, "Pong")
+}
+
+func (myPc *pc) duplicateRam() {
+	myPc.ram *= 2
+}
+
+func stringers() {
+	myPC := pc{ram: 8, rom: 16, processor: "amd"}
+	fmt.Println(myPC)
+}
+
+func (myPc pc) String() string {
+	return fmt.Sprintf("%d poquito", myPc.ram)
+}
+
+func interfaces() {
+	cuadra := cuadrado{base: 10}
+	recta := rectangulo{base: 10, altura: 5}
+	calcularArea(cuadra)
+	calcularArea(recta)
+
+	myInterface := []interface{}{"hola", 1, 1.2}
+	fmt.Println(myInterface...)
+
+}
+
+type cuadrado struct {
+	base float64
+}
+
+type rectangulo struct {
+	base   float64
+	altura float64
+}
+
+type figuras interface {
+	area() float64
+}
+
+func (c cuadrado) area() float64 {
+	return c.base * c.base
+}
+
+func (r rectangulo) area() float64 {
+	return r.base * r.altura
+}
+
+func calcularArea(f figuras) {
+	fmt.Println(f.area())
+}
+
+func goroutines() {
+	var wg sync.WaitGroup
+
+	fmt.Println("First")
+	wg.Add(1)
+
+	go say("Second", &wg)
+
+	wg.Wait()
+
+}
+
+func say(text string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	fmt.Println(text)
+}
+
+func anonymous() {
+	go func(text string) {
+		fmt.Println(text)
+	}("mensaje")
 }
