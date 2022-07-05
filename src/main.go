@@ -88,4 +88,28 @@ func main() {
 	//Complex128 = Real e Imaginario float64
 	//Ejemplo : c:=10 + 8i
 
+	fmtPackage()
+
+}
+
+func fmtPackage() {
+	helloMessage := "hello"
+	broMessage := "bro"
+
+	fmt.Println(helloMessage, broMessage)
+	fmt.Println(helloMessage, broMessage)
+
+	club := "CSD"
+	years := 100
+
+	fmt.Printf("%s tiene más de %d años\n", club, years)
+	fmt.Printf("%v tiene más de %v años\n", club, years)
+
+	message := fmt.Sprintf("%v tiene más de %v años", club, years)
+
+	fmt.Println(message)
+
+	//tipo de datos
+	fmt.Printf("el tipo de dato es %T\n", club)
+
 }
