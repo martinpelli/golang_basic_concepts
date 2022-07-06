@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-	"golang_platzi/src/mypackage"
+	"github.com/martinpelli/golang_platzi/src/mypackage"
 	"log"
 	"strconv"
 	"strings"
 	"sync"
+	"net/http"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -125,6 +127,10 @@ func main() {
 	goroutines()
 
 	anonymous()
+
+	channels()
+
+	echoModule()
 
 }
 
@@ -415,4 +421,58 @@ func anonymous() {
 	go func(text string) {
 		fmt.Println(text)
 	}("mensaje")
+}
+
+func channels(){
+	c := make(chan string, 1)
+
+	fmt.Println("Hello")
+	go  say2("Bye", c)
+	fmt.Println(<-c)
+
+	d := make(chan string, 2)
+	d <- "Message1"
+	d <- "Message2"
+
+	fmt.Println(len(d),cap(d))
+
+	close(d)
+
+	for message := range d {
+		fmt.Println(message)
+	}
+
+	email1 := make(chan string)
+	email12 := make(chan string)
+
+	go message("message 1", email1)
+	go message("message 2", email12)
+
+	for i:= 0; i < 2; i++{
+		select{
+		case m1 := <-email1:
+			fmt.Println("email recibido de email1", m1)
+		case m2 := <-email12:
+			fmt.Println("mail recibido de email2", m2)
+		}
+	}
+
+
+}
+
+func say2(text string, c chan<- string){
+	c <- text
+}
+
+func message (text string, c chan string){
+	c <- text
+}
+
+func echoModule(){
+	e := echo.New()
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Hello World")
+	})
+
+	e.Logger.Fatal(e.Start(":1323"))
 }
